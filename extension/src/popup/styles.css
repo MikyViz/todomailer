@@ -1,0 +1,158 @@
+:root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #102a43;
+  background: #f0f4f8;
+}
+
+body {
+  margin: 0;
+  min-width: 360px;
+  background: radial-gradient(circle at top right, #d9e2ec, #f0f4f8 55%);
+}
+
+.popup {
+  padding: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+textarea,
+input,
+select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #bcccdc;
+  border-radius: 8px;
+  padding: 8px;
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  width: 100%;
+  margin-top: 8px;
+  background: #0f7ae5;
+  color: #fff;
+}
+
+.secondary {
+  background: #e4ecf5;
+  color: #102a43;
+}
+
+.ghost {
+  background: transparent;
+  color: #0f7ae5;
+}
+
+.danger {
+  background: #fce8e6;
+  color: #8f1d21;
+}
+
+.status {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #486581;
+}
+
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.todoItem {
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  padding: 8px;
+  background: #f8fbff;
+}
+
+.todoItem label {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+}
+
+.todoItem small {
+  display: block;
+  margin-top: 6px;
+  color: #627d98;
+}
+
+.actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #627d98;
+}
+
+.empty {
+  margin: 8px 0 0;
+  color: #627d98;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.toggleRow input {
+  width: auto;
+}
+
+.fieldLabel {
+  display: block;
+  margin: 8px 0 4px;
+  font-size: 13px;
+}

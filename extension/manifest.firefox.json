@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Todo Mailer",
+  "version": "1.0.0",
+  "description": "Saves todos and sends them to your email.",
+  "action": {
+    "default_title": "Todo Mailer",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "scripts": ["assets/background.js"]
+  },
+  "permissions": ["storage", "alarms"],
+  "host_permissions": ["http://localhost:3000/*"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "todomailer@example.local",
+      "strict_min_version": "121.0"
+    }
+  }
+}
