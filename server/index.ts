@@ -1,34 +1,22 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
 
 dotenv.config();
 
 const port = Number(process.env.PORT ?? 3000);
-const smtpHost = process.env.SMTP_HOST;
-const smtpPort = Number(process.env.SMTP_PORT ?? 587);
-const smtpSecure = String(process.env.SMTP_SECURE ?? "false") === "true";
-const smtpUser = process.env.SMTP_USER;
-const smtpPass = process.env.SMTP_PASS;
-const mailFrom = process.env.MAIL_FROM ?? smtpUser;
+const resendApiKey = process.env.RESEND_API_KEY;
+const mailFrom = process.env.MAIL_FROM;
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!smtpHost || !smtpUser || !smtpPass || !mailFrom || !supabaseUrl || !supabaseServiceRoleKey) {
+if (!resendApiKey || !mailFrom || !supabaseUrl || !supabaseServiceRoleKey) {
   throw new Error("Server config is missing. Fill .env based on .env.example");
 }
 
-const transporter = nodemailer.createTransport({
-  host: smtpHost,
-  port: smtpPort,
-  secure: smtpSecure,
-  auth: {
-    user: smtpUser,
-    pass: smtpPass
-  }
-});
+const resend = new Resend(resendApiKey);
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
   auth: {
@@ -84,13 +72,17 @@ app.post("/send", async (req, res) => {
     : `<p>${escapeHtml(text)}</p>`;
 
   try {
-    await transporter.sendMail({
+    const { error } = await resend.emails.send({
       from: mailFrom,
       to,
       subject,
       text,
       html
     });
+
+    if (error) {
+      throw error;
+    }
 
     res.json({ ok: true });
   } catch (error) {

@@ -16,8 +16,8 @@ cp .env.example .env
 npm run dev
 ```
 
-Fill `.env` with valid SMTP credentials.
-Also configure the Supabase project URL and service-role key. The service-role key must stay on the server.
+Fill `.env` with a Resend API key and a valid sender address.
+Also configure the Supabase project URL and service-role key. The Resend API key and service-role key must stay on the server.
 
 ## 2) Build extension
 
