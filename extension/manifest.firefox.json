@@ -1,11 +1,23 @@
 {
   "manifest_version": 3,
   "name": "Todo Mailer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Saves todos and sends them to your email.",
   "action": {
     "default_title": "Todo Mailer",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon-128.png",
+      "32": "icon-128.png",
+      "48": "icon-128.png",
+      "128": "icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icon-128.png",
+    "32": "icon-128.png",
+    "48": "icon-128.png",
+    "128": "icon-128.png"
   },
   "options_page": "options.html",
   "background": {
@@ -15,7 +27,7 @@
   "host_permissions": ["http://localhost:3000/*"],
   "browser_specific_settings": {
     "gecko": {
-      "id": "todomailer@example.local",
+      "id": "todomailer@moosebro.local",
       "strict_min_version": "121.0"
     }
   }
