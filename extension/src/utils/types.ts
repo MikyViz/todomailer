@@ -10,14 +10,12 @@ export type RetentionOption = "day" | "threeDays" | "week" | "month" | "forever"
 export interface Settings {
   showTodoList: boolean;
   retention: RetentionOption;
-  userEmail: string;
   backendUrl: string;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   showTodoList: false,
   retention: "week",
-  userEmail: "",
   backendUrl: "http://localhost:3000/send"
 };
 

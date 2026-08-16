@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AuthPanel } from "./AuthPanel";
 import { cleanupExpiredTodos } from "../utils/cleanup";
 import { getSettings, patchSettings } from "../utils/storage";
 import { DEFAULT_SETTINGS, RETENTION_LABELS, type Settings } from "../utils/types";
@@ -28,6 +29,8 @@ export function OptionsApp() {
         <h1>Todo Mailer Settings</h1>
       </header>
 
+      <AuthPanel />
+
       <section className="panel">
         <label className="toggleRow">
           <span>Show todo list in popup</span>
@@ -54,17 +57,6 @@ export function OptionsApp() {
             </option>
           ))}
         </select>
-
-        <label className="fieldLabel" htmlFor="email">
-          User email
-        </label>
-        <input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          value={settings.userEmail}
-          onChange={(event) => void updateSetting("userEmail", event.target.value.trim())}
-        />
 
         <label className="fieldLabel" htmlFor="backendUrl">
           Backend URL /send

@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import nodemailer from "nodemailer";
+import { createClient } from "@supabase/supabase-js";
 
 dotenv.config();
 
@@ -12,9 +13,11 @@ const smtpSecure = String(process.env.SMTP_SECURE ?? "false") === "true";
 const smtpUser = process.env.SMTP_USER;
 const smtpPass = process.env.SMTP_PASS;
 const mailFrom = process.env.MAIL_FROM ?? smtpUser;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!smtpHost || !smtpUser || !smtpPass || !mailFrom) {
-  throw new Error("SMTP config is missing. Fill .env based on .env.example");
+if (!smtpHost || !smtpUser || !smtpPass || !mailFrom || !supabaseUrl || !supabaseServiceRoleKey) {
+  throw new Error("Server config is missing. Fill .env based on .env.example");
 }
 
 const transporter = nodemailer.createTransport({
@@ -27,8 +30,14 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
+
 interface SendRequestBody {
-  to?: string;
   subject?: string;
   todoText?: string;
   todos?: Array<{
@@ -48,10 +57,10 @@ app.get("/health", (_req, res) => {
 
 app.post("/send", async (req, res) => {
   const body = req.body as SendRequestBody;
-  const to = body.to?.trim();
+  const to = await getAuthenticatedEmail(req);
 
   if (!to) {
-    res.status(400).json({ error: "Field 'to' is required." });
+    res.status(401).json({ error: "A verified Supabase session is required." });
     return;
   }
 
@@ -101,4 +110,18 @@ function escapeHtml(input: string): string {
     .replace(/>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+async function getAuthenticatedEmail(req: express.Request): Promise<string | undefined> {
+  const token = req.headers.authorization?.match(/^Bearer (.+)$/i)?.[1];
+  if (!token) {
+    return undefined;
+  }
+
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data.user?.email || !data.user.email_confirmed_at) {
+    return undefined;
+  }
+
+  return data.user.email;
 }

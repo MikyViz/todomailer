@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { AuthPanel } from "../options/AuthPanel";
 import { cleanupExpiredTodos } from "../utils/cleanup";
 import { sendTodoDigest, sendTodoEmail } from "../utils/mailer";
 import {
@@ -35,6 +36,7 @@ export function App() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [status, setStatus] = useState("");
   const [showSettings, setShowSettings] = useState(false);
+  const [authenticatedEmail, setAuthenticatedEmail] = useState<string>();
 
   useEffect(() => {
     void (async () => {
@@ -59,8 +61,8 @@ export function App() {
     setLocalTodos(nextTodos);
     setInput("");
 
-    if (!settings.userEmail) {
-      setStatus("Todo saved. Please add your email in settings before sending.");
+    if (!authenticatedEmail) {
+      setStatus("Todo saved. Sign in in settings before sending.");
       return;
     }
 
@@ -83,8 +85,8 @@ export function App() {
   }
 
   async function handleResendTodo(todo: Todo): Promise<void> {
-    if (!settings.userEmail) {
-      setStatus("Please set your email in the settings first.");
+    if (!authenticatedEmail) {
+      setStatus("Sign in in settings before sending.");
       return;
     }
 
@@ -97,8 +99,8 @@ export function App() {
   }
 
   async function handleResendAll(): Promise<void> {
-    if (!settings.userEmail) {
-      setStatus("Please set your email in the settings first.");
+    if (!authenticatedEmail) {
+      setStatus("Sign in in settings before sending.");
       return;
     }
 
@@ -130,7 +132,9 @@ export function App() {
       </header>
 
       {showSettings ? (
-        <section className="panel">
+        <>
+          <AuthPanel onSessionChange={setAuthenticatedEmail} />
+          <section className="panel">
           <label className="toggleRow">
             <span>Show todo list</span>
             <input
@@ -157,17 +161,6 @@ export function App() {
             ))}
           </select>
 
-          <label className="fieldLabel" htmlFor="email">
-            User email
-          </label>
-          <input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            value={settings.userEmail}
-            onChange={(event) => void updateSetting("userEmail", event.target.value.trim())}
-          />
-
           <label className="fieldLabel" htmlFor="backendUrl">
             Backend URL /send
           </label>
@@ -184,7 +177,8 @@ export function App() {
           >
             Open settings page
           </button>
-        </section>
+          </section>
+        </>
       ) : (
         <>
           <section className="panel">

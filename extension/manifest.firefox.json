@@ -24,7 +24,7 @@
     "scripts": ["assets/background.js"]
   },
   "permissions": ["storage", "alarms"],
-  "host_permissions": ["http://localhost:3000/*"],
+  "host_permissions": ["http://localhost:3000/*", "https://*.supabase.co/*"],
   "browser_specific_settings": {
     "gecko": {
       "id": "todomailer@moosebro.local",

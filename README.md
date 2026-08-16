@@ -17,14 +17,19 @@ npm run dev
 ```
 
 Fill `.env` with valid SMTP credentials.
+Also configure the Supabase project URL and service-role key. The service-role key must stay on the server.
 
 ## 2) Build extension
 
 ```bash
 cd extension
 npm install
+cp .env.example .env
 npm run build
 ```
+
+Fill `extension/.env` with the Supabase project URL and anon key. Enable Email authentication in
+Supabase, and configure the project's site URL and redirect URLs for the extension before publishing.
 
 Load unpacked extension in Chrome/Edge from `extension/dist`.
 
@@ -56,7 +61,7 @@ Todo Mailer stores only the local app data needed for task management and settin
 - Settings in popup and separate options page:
   - Show todo list toggle (default OFF)
   - Retention period (Day / 3 days / Week / Month / Until delete), default Week
-  - User email + backend URL
+  - Supabase sign-in + backend URL
 - Todo list supports:
   - complete/incomplete checkbox with strikethrough
   - manual delete
@@ -70,11 +75,12 @@ Todo Mailer stores only the local app data needed for task management and settin
 
 ```json
 {
-  "to": "user@example.com",
   "subject": "Todo update",
   "todoText": "One todo text",
   "todos": [{ "text": "Task", "completed": false, "createdAt": 0 }]
 }
 ```
 
-`todoText` is used for single todo messages, `todos` for digest messages.
+`todoText` is used for single todo messages, `todos` for digest messages. The request requires a
+Supabase access token in the `Authorization: Bearer <token>` header. The server always sends to the
+authenticated user's confirmed email address.

@@ -156,3 +156,13 @@ ul {
   margin: 8px 0 4px;
   font-size: 13px;
 }
+
+.accountEmail {
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+
+.authSwitch {
+  display: block;
+  margin: 8px auto 0;
+}
