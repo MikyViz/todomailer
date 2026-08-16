@@ -22,9 +22,9 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 export const RETENTION_LABELS: Record<RetentionOption, string> = {
-  day: "День",
-  threeDays: "3 дня",
-  week: "Неделю",
-  month: "Месяц",
-  forever: "Пока не удалю"
+  day: "Day",
+  threeDays: "3 days",
+  week: "Week",
+  month: "Month",
+  forever: "Until deleted"
 };

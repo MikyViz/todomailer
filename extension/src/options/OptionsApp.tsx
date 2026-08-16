@@ -18,19 +18,19 @@ export function OptionsApp() {
   async function updateSetting<K extends keyof Settings>(key: K, value: Settings[K]): Promise<void> {
     const next = await patchSettings({ [key]: value } as Pick<Settings, K>);
     setSettings(next);
-    setStatus("Сохранено");
+    setStatus("Saved");
     window.setTimeout(() => setStatus(""), 1200);
   }
 
   return (
     <main className="popup" style={{ maxWidth: 620, margin: "20px auto" }}>
       <header className="header">
-        <h1>Настройки Todo Mailer</h1>
+        <h1>Todo Mailer Settings</h1>
       </header>
 
       <section className="panel">
         <label className="toggleRow">
-          <span>Отображать список тудушек в popup</span>
+          <span>Show todo list in popup</span>
           <input
             type="checkbox"
             checked={settings.showTodoList}
@@ -39,7 +39,7 @@ export function OptionsApp() {
         </label>
 
         <label className="fieldLabel" htmlFor="retention">
-          Сколько хранить тудушки
+          How long to keep todos
         </label>
         <select
           id="retention"
@@ -56,7 +56,7 @@ export function OptionsApp() {
         </select>
 
         <label className="fieldLabel" htmlFor="email">
-          Email пользователя
+          User email
         </label>
         <input
           id="email"
@@ -67,7 +67,7 @@ export function OptionsApp() {
         />
 
         <label className="fieldLabel" htmlFor="backendUrl">
-          URL backend /send
+          Backend URL /send
         </label>
         <input
           id="backendUrl"

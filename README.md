@@ -44,6 +44,10 @@ cd extension
 npm run build:chrome
 ```
 
+## Privacy
+
+Todo Mailer stores only the local app data needed for task management and settings in the browser. It sends emails through a configured SMTP server and does not use third-party analytics or tracking services. The email provider may keep sent messages and metadata according to its own privacy policy.
+
 ## Behavior implemented
 
 - Popup with textarea + **Send** button

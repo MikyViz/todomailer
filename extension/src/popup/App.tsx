@@ -60,15 +60,15 @@ export function App() {
     setInput("");
 
     if (!settings.userEmail) {
-      setStatus("Тудушка сохранена. Укажите email в настройках для отправки.");
+      setStatus("Todo saved. Please add your email in settings before sending.");
       return;
     }
 
     try {
       await sendTodoEmail(settings, todo);
-      setStatus("Тудушка отправлена на email.");
+      setStatus("Todo sent by email.");
     } catch (error) {
-      setStatus(`Тудушка сохранена, но отправка не удалась: ${(error as Error).message}`);
+      setStatus(`Todo was saved, but sending failed: ${(error as Error).message}`);
     }
   }
 
@@ -84,29 +84,29 @@ export function App() {
 
   async function handleResendTodo(todo: Todo): Promise<void> {
     if (!settings.userEmail) {
-      setStatus("Сначала укажите email в настройках.");
+      setStatus("Please set your email in the settings first.");
       return;
     }
 
     try {
       await sendTodoEmail(settings, todo);
-      setStatus("Тудушка отправлена повторно.");
+      setStatus("Todo sent again.");
     } catch (error) {
-      setStatus(`Повторная отправка не удалась: ${(error as Error).message}`);
+      setStatus(`Resending failed: ${(error as Error).message}`);
     }
   }
 
   async function handleResendAll(): Promise<void> {
     if (!settings.userEmail) {
-      setStatus("Сначала укажите email в настройках.");
+      setStatus("Please set your email in the settings first.");
       return;
     }
 
     try {
       await sendTodoDigest(settings, visibleTodos);
-      setStatus("Список тудушек отправлен.");
+      setStatus("Todo list sent.");
     } catch (error) {
-      setStatus(`Отправка списка не удалась: ${(error as Error).message}`);
+      setStatus(`Sending the list failed: ${(error as Error).message}`);
     }
   }
 
@@ -125,14 +125,14 @@ export function App() {
       <header className="header">
         <h1>Todo Mailer</h1>
         <button className="ghost" onClick={() => setShowSettings((prev) => !prev)}>
-          {showSettings ? "Назад" : "Настройки"}
+          {showSettings ? "Back" : "Settings"}
         </button>
       </header>
 
       {showSettings ? (
         <section className="panel">
           <label className="toggleRow">
-            <span>Отображать список тудушек</span>
+            <span>Show todo list</span>
             <input
               type="checkbox"
               checked={settings.showTodoList}
@@ -141,7 +141,7 @@ export function App() {
           </label>
 
           <label className="fieldLabel" htmlFor="retention">
-            Сколько хранить тудушки
+            How long to keep todos
           </label>
           <select
             id="retention"
@@ -158,7 +158,7 @@ export function App() {
           </select>
 
           <label className="fieldLabel" htmlFor="email">
-            Email пользователя
+            User email
           </label>
           <input
             id="email"
@@ -169,7 +169,7 @@ export function App() {
           />
 
           <label className="fieldLabel" htmlFor="backendUrl">
-            URL backend /send
+            Backend URL /send
           </label>
           <input
             id="backendUrl"
@@ -182,7 +182,7 @@ export function App() {
             className="secondary"
             onClick={() => chrome.runtime.openOptionsPage()}
           >
-            Открыть страницу настроек
+            Open settings page
           </button>
         </section>
       ) : (
@@ -190,12 +190,12 @@ export function App() {
           <section className="panel">
             <textarea
               rows={4}
-              placeholder="Введите тудушку..."
+              placeholder="Enter a todo..."
               value={input}
               onChange={(event) => setInput(event.target.value)}
             />
             <button className="primary" onClick={() => void handleSubmit()}>
-              Отправить
+              Send
             </button>
             {status && <p className="status">{status}</p>}
           </section>
@@ -203,14 +203,14 @@ export function App() {
           {settings.showTodoList && (
             <section className="panel listPanel">
               <div className="listHeader">
-                <h2>Тудушки</h2>
+                <h2>Todos</h2>
                 <button className="secondary" onClick={() => void handleResendAll()}>
-                  Послать ещё раз (все)
+                  Send again (all)
                 </button>
               </div>
 
               {visibleTodos.length === 0 ? (
-                <p className="empty">Активных тудушек нет.</p>
+                <p className="empty">No active todos.</p>
               ) : (
                 <ul>
                   {visibleTodos.map((todo) => (
@@ -226,10 +226,10 @@ export function App() {
                       <small>{formatDate(todo.createdAt)}</small>
                       <div className="actions">
                         <button className="secondary" onClick={() => void handleResendTodo(todo)}>
-                          Послать ещё раз
+                          Send again
                         </button>
                         <button className="danger" onClick={() => void handleDelete(todo.id)}>
-                          Удалить
+                          Delete
                         </button>
                       </div>
                     </li>
