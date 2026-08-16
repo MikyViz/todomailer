@@ -1,7 +1,7 @@
 import { getSettings, getTodos, setTodos } from "./storage";
 import type { RetentionOption, Todo } from "./types";
 
-const retentionMsMap: Record<Exclude<RetentionOption, "forever">, number> = {
+const retentionMsMap: Record<Exclude<RetentionOption, "forever" | "none">, number> = {
   day: 24 * 60 * 60 * 1000,
   threeDays: 3 * 24 * 60 * 60 * 1000,
   week: 7 * 24 * 60 * 60 * 1000,
@@ -9,6 +9,10 @@ const retentionMsMap: Record<Exclude<RetentionOption, "forever">, number> = {
 };
 
 function isExpired(todo: Todo, retention: RetentionOption, now: number): boolean {
+  if (retention === "none") {
+    return true;
+  }
+
   if (retention === "forever") {
     return false;
   }
