@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { AuthPanel } from "../options/AuthPanel";
+import { getAuthenticatedUser } from "../utils/auth";
 import { cleanupExpiredTodos } from "../utils/cleanup";
 import { sendTodoDigest, sendTodoEmail } from "../utils/mailer";
 import {
   addTodo,
   deleteTodo,
   getSettings,
-  getTodos,
   patchSettings,
   setTodos,
   toggleTodo
@@ -37,16 +37,31 @@ export function App() {
   const [status, setStatus] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [authenticatedEmail, setAuthenticatedEmail] = useState<string>();
+  const [userId, setUserId] = useState<string>();
+
+  async function loadTodos(accountId?: string): Promise<void> {
+    const active = await cleanupExpiredTodos(accountId);
+    setLocalTodos(active);
+  }
 
   useEffect(() => {
     void (async () => {
       await chrome.runtime.sendMessage({ type: "RUN_CLEANUP" }).catch(() => undefined);
-      const active = await cleanupExpiredTodos();
+      const user = await getAuthenticatedUser();
+      setAuthenticatedEmail(user?.email);
+      setUserId(user?.id);
+      await loadTodos(user?.id);
       const loadedSettings = await getSettings();
-      setLocalTodos(active);
       setSettings(loadedSettings);
     })();
   }, []);
+
+  async function handleSessionChange(accountId: string | undefined): Promise<void> {
+    const user = await getAuthenticatedUser();
+    setAuthenticatedEmail(user?.email);
+    setUserId(accountId);
+    await loadTodos(accountId);
+  }
 
   const visibleTodos = useMemo(() => todos, [todos]);
 
@@ -57,7 +72,7 @@ export function App() {
     }
 
     const todo = createTodo(text);
-    const nextTodos = await addTodo(todo);
+    const nextTodos = await addTodo(todo, userId);
     setLocalTodos(nextTodos);
     setInput("");
 
@@ -75,12 +90,12 @@ export function App() {
   }
 
   async function handleToggle(todoId: string): Promise<void> {
-    const next = await toggleTodo(todoId);
+    const next = await toggleTodo(todoId, userId);
     setLocalTodos(next);
   }
 
   async function handleDelete(todoId: string): Promise<void> {
-    const next = await deleteTodo(todoId);
+    const next = await deleteTodo(todoId, userId);
     setLocalTodos(next);
   }
 
@@ -116,8 +131,8 @@ export function App() {
     const next = await patchSettings({ [key]: value } as Pick<Settings, K>);
     setSettings(next);
     if (key === "retention") {
-      const active = await cleanupExpiredTodos();
-      await setTodos(active);
+      const active = await cleanupExpiredTodos(userId);
+      await setTodos(active, userId);
       setLocalTodos(active);
     }
   }
@@ -133,7 +148,7 @@ export function App() {
 
       {showSettings ? (
         <>
-          <AuthPanel onSessionChange={setAuthenticatedEmail} />
+          <AuthPanel onSessionChange={(accountId) => void handleSessionChange(accountId)} />
           <section className="panel">
           <label className="toggleRow">
             <span>Show todo list</span>

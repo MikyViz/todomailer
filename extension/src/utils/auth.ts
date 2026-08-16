@@ -17,9 +17,23 @@ function getSupabase(): SupabaseClient {
   return supabase;
 }
 
-export async function getAuthenticatedEmail(): Promise<string | undefined> {
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+}
+
+export async function getAuthenticatedUser(): Promise<AuthenticatedUser | undefined> {
   const { data } = await getSupabase().auth.getSession();
-  return data.session?.user.email;
+  const user = data.session?.user;
+  if (!user?.email) {
+    return undefined;
+  }
+
+  return { id: user.id, email: user.email };
+}
+
+export async function getAuthenticatedEmail(): Promise<string | undefined> {
+  return (await getAuthenticatedUser())?.email;
 }
 
 export async function getAccessToken(): Promise<string> {

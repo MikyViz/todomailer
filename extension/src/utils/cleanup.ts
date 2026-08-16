@@ -17,13 +17,13 @@ function isExpired(todo: Todo, retention: RetentionOption, now: number): boolean
   return now - todo.createdAt > ttlMs;
 }
 
-export async function cleanupExpiredTodos(): Promise<Todo[]> {
-  const [settings, todos] = await Promise.all([getSettings(), getTodos()]);
+export async function cleanupExpiredTodos(userId?: string): Promise<Todo[]> {
+  const [settings, todos] = await Promise.all([getSettings(), getTodos(userId)]);
   const now = Date.now();
   const active = todos.filter((todo) => !isExpired(todo, settings.retention, now));
 
   if (active.length !== todos.length) {
-    await setTodos(active);
+    await setTodos(active, userId);
   }
 
   return active;

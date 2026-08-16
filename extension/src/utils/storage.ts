@@ -3,6 +3,10 @@ import { DEFAULT_SETTINGS, type Settings, type Todo } from "./types";
 const TODOS_KEY = "todos";
 const SETTINGS_KEY = "settings";
 
+function getTodosKey(userId?: string): string {
+  return `${TODOS_KEY}:${userId ?? "anonymous"}`;
+}
+
 function storageGet<T>(key: string): Promise<T | undefined> {
   return new Promise((resolve) => {
     chrome.storage.local.get([key], (result) => {
@@ -17,34 +21,34 @@ function storageSet(key: string, value: unknown): Promise<void> {
   });
 }
 
-export async function getTodos(): Promise<Todo[]> {
-  return (await storageGet<Todo[]>(TODOS_KEY)) ?? [];
+export async function getTodos(userId?: string): Promise<Todo[]> {
+  return (await storageGet<Todo[]>(getTodosKey(userId))) ?? [];
 }
 
-export async function setTodos(todos: Todo[]): Promise<void> {
-  await storageSet(TODOS_KEY, todos);
+export async function setTodos(todos: Todo[], userId?: string): Promise<void> {
+  await storageSet(getTodosKey(userId), todos);
 }
 
-export async function addTodo(todo: Todo): Promise<Todo[]> {
-  const todos = await getTodos();
+export async function addTodo(todo: Todo, userId?: string): Promise<Todo[]> {
+  const todos = await getTodos(userId);
   const next = [todo, ...todos];
-  await setTodos(next);
+  await setTodos(next, userId);
   return next;
 }
 
-export async function deleteTodo(todoId: string): Promise<Todo[]> {
-  const todos = await getTodos();
+export async function deleteTodo(todoId: string, userId?: string): Promise<Todo[]> {
+  const todos = await getTodos(userId);
   const next = todos.filter((todo) => todo.id !== todoId);
-  await setTodos(next);
+  await setTodos(next, userId);
   return next;
 }
 
-export async function toggleTodo(todoId: string): Promise<Todo[]> {
-  const todos = await getTodos();
+export async function toggleTodo(todoId: string, userId?: string): Promise<Todo[]> {
+  const todos = await getTodos(userId);
   const next = todos.map((todo) =>
     todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
   );
-  await setTodos(next);
+  await setTodos(next, userId);
   return next;
 }
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthPanel } from "./AuthPanel";
+import { getAuthenticatedUser } from "../utils/auth";
 import { cleanupExpiredTodos } from "../utils/cleanup";
 import { getSettings, patchSettings } from "../utils/storage";
 import { DEFAULT_SETTINGS, RETENTION_LABELS, type Settings } from "../utils/types";
@@ -10,7 +11,8 @@ export function OptionsApp() {
 
   useEffect(() => {
     void (async () => {
-      await cleanupExpiredTodos();
+      const user = await getAuthenticatedUser();
+      await cleanupExpiredTodos(user?.id);
       const current = await getSettings();
       setSettings(current);
     })();

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  getAuthenticatedUser,
   getAuthenticatedEmail,
   signIn,
   signOut,
@@ -7,7 +8,7 @@ import {
 } from "../utils/auth";
 
 interface AuthPanelProps {
-  onSessionChange?: (email: string | undefined) => void;
+  onSessionChange?: (userId: string | undefined) => void;
 }
 
 export function AuthPanel({ onSessionChange }: AuthPanelProps) {
@@ -21,7 +22,8 @@ export function AuthPanel({ onSessionChange }: AuthPanelProps) {
     try {
       const currentEmail = await getAuthenticatedEmail();
       setEmail(currentEmail);
-      onSessionChange?.(currentEmail);
+      const user = await getAuthenticatedUser();
+      onSessionChange?.(user?.id);
     } catch (error) {
       setStatus((error as Error).message);
     }

@@ -1,10 +1,12 @@
 import { cleanupExpiredTodos } from "../utils/cleanup";
+import { getAuthenticatedUser } from "../utils/auth";
 
 const CLEANUP_ALARM = "todo-cleanup";
 
 async function runCleanup(): Promise<void> {
   try {
-    await cleanupExpiredTodos();
+    const user = await getAuthenticatedUser();
+    await cleanupExpiredTodos(user?.id);
   } catch (error) {
     console.error("Cleanup failed", error);
   }
