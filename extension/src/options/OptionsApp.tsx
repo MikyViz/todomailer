@@ -60,16 +60,6 @@ export function OptionsApp() {
           ))}
         </select>
 
-        <label className="fieldLabel" htmlFor="backendUrl">
-          Backend URL /send
-        </label>
-        <input
-          id="backendUrl"
-          type="url"
-          value={settings.backendUrl}
-          onChange={(event) => void updateSetting("backendUrl", event.target.value.trim())}
-        />
-
         {status && <p className="status">{status}</p>}
       </section>
     </main>

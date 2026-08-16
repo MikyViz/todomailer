@@ -30,6 +30,7 @@ npm run build
 
 Fill `extension/.env` with the Supabase project URL and anon key. Enable Email authentication in
 Supabase, and configure the project's site URL and redirect URLs for the extension before publishing.
+Set `VITE_BACKEND_SEND_URL` if backend is not running at `http://localhost:3000/send`.
 
 Load unpacked extension in Chrome/Edge from `extension/dist`.
 
@@ -61,7 +62,7 @@ Todo Mailer stores only the local app data needed for task management and settin
 - Settings in popup and separate options page:
   - Show todo list toggle (default OFF)
   - Retention period (Day / 3 days / Week / Month / Until delete), default Week
-  - Supabase sign-in + backend URL
+  - Supabase sign-in
 - Todo list supports:
   - complete/incomplete checkbox with strikethrough
   - manual delete

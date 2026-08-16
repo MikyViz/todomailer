@@ -82,7 +82,7 @@ export function App() {
     }
 
     try {
-      await sendTodoEmail(settings, todo);
+      await sendTodoEmail(todo);
       setStatus("Todo sent by email.");
     } catch (error) {
       setStatus(`Todo was saved, but sending failed: ${(error as Error).message}`);
@@ -106,7 +106,7 @@ export function App() {
     }
 
     try {
-      await sendTodoEmail(settings, todo);
+      await sendTodoEmail(todo);
       setStatus("Todo sent again.");
     } catch (error) {
       setStatus(`Resending failed: ${(error as Error).message}`);
@@ -120,7 +120,7 @@ export function App() {
     }
 
     try {
-      await sendTodoDigest(settings, visibleTodos);
+      await sendTodoDigest(visibleTodos);
       setStatus("Todo list sent.");
     } catch (error) {
       setStatus(`Sending the list failed: ${(error as Error).message}`);
@@ -175,16 +175,6 @@ export function App() {
               </option>
             ))}
           </select>
-
-          <label className="fieldLabel" htmlFor="backendUrl">
-            Backend URL /send
-          </label>
-          <input
-            id="backendUrl"
-            type="url"
-            value={settings.backendUrl}
-            onChange={(event) => void updateSetting("backendUrl", event.target.value.trim())}
-          />
 
           <button
             className="secondary"
