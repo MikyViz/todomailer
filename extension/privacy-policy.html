@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Privacy Policy for Todo Mailer" />
+    <title>Privacy Policy | Todo Mailer</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #18212f;
+        --muted: #5d6878;
+        --line: #dce3ea;
+        --paper: #fffdf8;
+        --accent: #176b87;
+        --accent-soft: #e2f1f3;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #eef4f3;
+        color: var(--ink);
+        font: 16px/1.65 Georgia, "Times New Roman", serif;
+      }
+
+      main {
+        width: min(100% - 32px, 800px);
+        margin: 48px auto;
+        padding: clamp(28px, 6vw, 64px);
+        background: var(--paper);
+        border-top: 6px solid var(--accent);
+        box-shadow: 0 18px 50px rgb(24 33 47 / 10%);
+      }
+
+      header {
+        margin-bottom: 40px;
+      }
+
+      h1,
+      h2 {
+        font-family: "Trebuchet MS", Verdana, sans-serif;
+        line-height: 1.2;
+      }
+
+      h1 {
+        max-width: 620px;
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 5vw, 3.4rem);
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin: 36px 0 10px;
+        font-size: 1.35rem;
+      }
+
+      p,
+      ul {
+        margin: 0 0 16px;
+      }
+
+      ul {
+        padding-left: 24px;
+      }
+
+      .updated {
+        color: var(--muted);
+        font: 0.9rem/1.4 "Trebuchet MS", Verdana, sans-serif;
+      }
+
+      .summary {
+        margin: 24px 0 32px;
+        padding: 18px 20px;
+        border-left: 4px solid var(--accent);
+        background: var(--accent-soft);
+      }
+
+      a {
+        color: var(--accent);
+      }
+
+      footer {
+        margin-top: 42px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 560px) {
+        main {
+          width: 100%;
+          min-height: 100vh;
+          margin: 0;
+          padding: 32px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Privacy Policy</h1>
+        <p class="updated">Todo Mailer · Last updated: August 17, 2026</p>
+      </header>
+
+      <p class="summary">
+        Todo Mailer is designed to keep your todo data under your control. We do not sell your
+        personal information and we do not use analytics or advertising trackers.
+      </p>
+
+      <h2>1. Information stored by the extension</h2>
+      <p>
+        Todo Mailer stores your todo items, completion status, timestamps, and display settings in
+        your browser's local extension storage. Todos may be separated by the signed-in account so
+        they are not mixed between accounts. The retention setting controls when expired todos are
+        removed automatically. You can also delete individual todos or sign out at any time.
+      </p>
+
+      <h2>2. Account information</h2>
+      <p>
+        If you create an account or sign in, Todo Mailer uses Supabase Authentication to process
+        your email address, account identifier, and authentication credentials. Passwords are
+        handled by Supabase and are not accessible to Todo Mailer. Supabase processes this data
+        according to its own privacy policy.
+      </p>
+
+      <h2>3. Gmail access and email content</h2>
+      <p>
+        To send todos by email, you may connect a Gmail account using Google's OAuth flow. Todo
+        Mailer requests the Gmail permission required to send messages. It stores the OAuth token
+        and connected Gmail address locally in the browser, and uses the token only to send todo
+        messages to your connected Gmail address. Todo Mailer does not read your inbox or other
+        Gmail messages.
+      </p>
+      <p>
+        Todo text is included in messages you ask Todo Mailer to send. Google may retain sent
+        messages and related metadata under Google's terms and privacy policy. Disconnecting Gmail
+        revokes the token with Google when possible and removes the local connection data.
+      </p>
+
+      <h2>4. Sharing and third parties</h2>
+      <p>
+        Todo Mailer does not sell, rent, or share your personal information for advertising. The
+        extension communicates with Supabase for authentication and with Google APIs for Gmail
+        authorization and message delivery. These services may process information as described in
+        their respective privacy policies.
+      </p>
+
+      <h2>5. Data retention and deletion</h2>
+      <p>
+        Local todos remain in the browser until you delete them or the selected retention period
+        removes them. You can remove local extension data through your browser's extension storage
+        controls. You can disconnect Gmail from Todo Mailer and delete your Todo Mailer account
+        through the authentication provider's available account controls. Contact us if you need
+        help with a deletion request.
+      </p>
+
+      <h2>6. Security</h2>
+      <p>
+        Todo Mailer uses browser extension storage and OAuth authorization rather than collecting
+        Gmail passwords. No method of electronic storage or transmission is completely secure, so
+        we cannot guarantee absolute security.
+      </p>
+
+      <h2>7. Children's privacy</h2>
+      <p>
+        Todo Mailer is not directed to children under 13, and we do not knowingly collect personal
+        information from children under 13.
+      </p>
+
+      <h2>8. Changes to this policy</h2>
+      <p>
+        We may update this Privacy Policy when the extension or its data practices change. The
+        updated policy will be published with a new effective date.
+      </p>
+
+      <footer>
+        Questions about this Privacy Policy can be raised in the
+        <a href="https://github.com/MikyViz/todomailer/issues">Todo Mailer GitHub repository</a>.
+      </footer>
+    </main>
+  </body>
+</html>

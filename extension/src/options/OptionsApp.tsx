@@ -62,6 +62,12 @@ export function OptionsApp() {
 
         {status && <p className="status">{status}</p>}
       </section>
+
+      <footer style={{ textAlign: "center", marginTop: 20 }}>
+        <a href="privacy-policy.html" target="_blank" rel="noreferrer">
+          Privacy Policy
+        </a>
+      </footer>
     </main>
   );
 }
