@@ -16,8 +16,19 @@ cp .env.example .env
 npm run dev
 ```
 
-Fill `.env` with a Resend API key and a valid sender address.
-Also configure the Supabase project URL and service-role key. The Resend API key and service-role key must stay on the server.
+Fill `.env` with the Supabase project URL, anon key, and a Google OAuth client ID.
+The Google client ID is public extension configuration; never put a Google client secret in the extension.
+
+Create a Google OAuth client for the extension, add the extension redirect URL shown by
+`chrome.identity.getRedirectURL("gmail")` to the OAuth client, and set:
+
+```env
+VITE_GOOGLE_CLIENT_ID=your-google-oauth-client-id
+```
+
+The extension requests only the `gmail.send` scope. Users authorize their own Gmail account,
+and messages are sent through the Gmail API from that account. The deployed server and Resend
+are not used for email delivery.
 
 ## 2) Build extension
 

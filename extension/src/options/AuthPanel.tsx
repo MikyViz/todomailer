@@ -6,6 +6,7 @@ import {
   signOut,
   signUp
 } from "../utils/auth";
+import { connectGmail, disconnectGmail, getGmailConnection } from "../utils/gmail";
 
 interface AuthPanelProps {
   onSessionChange?: (userId: string | undefined) => void;
@@ -17,6 +18,7 @@ export function AuthPanel({ onSessionChange }: AuthPanelProps) {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+  const [gmailEmail, setGmailEmail] = useState<string>();
 
   async function refreshSession(): Promise<void> {
     try {
@@ -24,6 +26,8 @@ export function AuthPanel({ onSessionChange }: AuthPanelProps) {
       setEmail(currentEmail);
       const user = await getAuthenticatedUser();
       onSessionChange?.(user?.id);
+      const gmail = await getGmailConnection();
+      setGmailEmail(gmail.email);
     } catch (error) {
       setStatus((error as Error).message);
     }
@@ -64,10 +68,42 @@ export function AuthPanel({ onSessionChange }: AuthPanelProps) {
     }
   }
 
+  async function handleConnectGmail(): Promise<void> {
+    try {
+      const connectedEmail = await connectGmail();
+      setGmailEmail(connectedEmail);
+      setStatus(`Gmail connected: ${connectedEmail}`);
+    } catch (error) {
+      setStatus((error as Error).message);
+    }
+  }
+
+  async function handleDisconnectGmail(): Promise<void> {
+    try {
+      await disconnectGmail();
+      setGmailEmail(undefined);
+      setStatus("Gmail disconnected.");
+    } catch (error) {
+      setStatus((error as Error).message);
+    }
+  }
+
   if (email) {
     return (
       <section className="panel">
         <p className="accountEmail">Signed in as {email}</p>
+        <p className="accountEmail">
+          {gmailEmail ? `Send from ${gmailEmail}` : "Gmail is not connected"}
+        </p>
+        {gmailEmail ? (
+          <button className="secondary" onClick={() => void handleDisconnectGmail()}>
+            Disconnect Gmail
+          </button>
+        ) : (
+          <button className="primary" onClick={() => void handleConnectGmail()}>
+            Connect Gmail
+          </button>
+        )}
         <button className="secondary" onClick={() => void handleSignOut()}>
           Sign out
         </button>

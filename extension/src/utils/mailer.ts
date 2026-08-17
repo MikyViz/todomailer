@@ -1,8 +1,5 @@
 import type { Todo } from "./types";
-import { getAccessToken } from "./auth";
-
-const SEND_ENDPOINT =
-  import.meta.env.VITE_BACKEND_SEND_URL?.trim() || "http://localhost:3000/send";
+import { getGmailConnection, sendGmailMessage } from "./gmail";
 
 interface SendPayload {
   subject: string;
@@ -11,21 +8,27 @@ interface SendPayload {
 }
 
 async function sendMail(payload: SendPayload): Promise<void> {
-  const accessToken = await getAccessToken();
-
-  const response = await fetch(SEND_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(body || "Failed to send email.");
+  const connection = await getGmailConnection();
+  if (!connection.email) {
+    throw new Error("Connect Gmail in settings before sending email.");
   }
+
+  const text = payload.todoText?.trim() || "No todo text provided.";
+  await sendGmailMessage({
+    to: connection.email,
+    subject: payload.subject,
+    text,
+    html: `<p>${escapeHtml(text)}</p>`
+  });
+}
+
+function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 export async function sendTodoEmail(todo: Todo): Promise<void> {
@@ -36,8 +39,23 @@ export async function sendTodoEmail(todo: Todo): Promise<void> {
 }
 
 export async function sendTodoDigest(todos: Todo[]): Promise<void> {
-  await sendMail({
+  const connection = await getGmailConnection();
+  if (!connection.email) {
+    throw new Error("Connect Gmail in settings before sending email.");
+  }
+
+  const text = [
+    "Todo digest:",
+    ...todos.map((todo, index) => `${index + 1}. ${todo.completed ? "[x]" : "[ ]"} ${todo.text}`)
+  ].join("\n");
+  const html = `<h3>Todo digest</h3><ul>${todos
+    .map((todo) => `<li>${todo.completed ? "<s>" : ""}${escapeHtml(todo.text)}${todo.completed ? "</s>" : ""}</li>`)
+    .join("")}</ul>`;
+
+  await sendGmailMessage({
+    to: connection.email,
     subject: "Todo digest",
-    todos
+    text,
+    html
   });
 }

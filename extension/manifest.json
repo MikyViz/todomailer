@@ -24,6 +24,6 @@
     "service_worker": "assets/background.js",
     "type": "module"
   },
-  "permissions": ["storage", "alarms"],
-  "host_permissions": ["http://localhost:3000/*", "https://todomailer.onrender.com/*", "https://*.supabase.co/*"]
+  "permissions": ["storage", "alarms", "identity"],
+  "host_permissions": ["http://localhost:3000/*", "https://todomailer.onrender.com/*", "https://*.supabase.co/*", "https://accounts.google.com/*", "https://oauth2.googleapis.com/*", "https://gmail.googleapis.com/*"]
 }
