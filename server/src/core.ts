@@ -10,8 +10,20 @@ const mailFrom = process.env.MAIL_FROM ?? smtpUser;
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!smtpHost || !smtpUser || !smtpPass || !mailFrom || !supabaseUrl || !supabaseServiceRoleKey) {
-  throw new Error("Server config is missing. Fill .env based on .env.example");
+const requiredEnv: Record<string, string | undefined> = {
+  SMTP_HOST: smtpHost,
+  SMTP_USER: smtpUser,
+  SMTP_PASS: smtpPass,
+  MAIL_FROM: mailFrom,
+  SUPABASE_URL: supabaseUrl,
+  SUPABASE_SERVICE_ROLE_KEY: supabaseServiceRoleKey
+};
+const missingEnv = Object.entries(requiredEnv)
+  .filter(([, value]) => !value)
+  .map(([key]) => key);
+
+if (missingEnv.length > 0) {
+  throw new Error(`Server config is missing: ${missingEnv.join(", ")}. Fill .env based on .env.example`);
 }
 
 export const transporter = nodemailer.createTransport({
