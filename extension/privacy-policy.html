@@ -129,42 +129,39 @@
         according to its own privacy policy.
       </p>
 
-      <h2>3. Gmail access and email content</h2>
+      <h2>3. Email delivery</h2>
       <p>
-        To send todos by email, you may connect a Gmail account using Google's OAuth flow. Todo
-        Mailer requests the Gmail permission required to send messages. It stores the OAuth token
-        and connected Gmail address locally in the browser, and uses the token only to send todo
-        messages to your connected Gmail address. Todo Mailer does not read your inbox or other
-        Gmail messages.
+        To send todos by email, Todo Mailer calls a backend service over HTTPS, authenticated with
+        your Supabase session token. The backend sends the message through a configured SMTP
+        provider to your confirmed account email address. Todo Mailer does not read your inbox or
+        any other email messages.
       </p>
       <p>
-        Todo text is included in messages you ask Todo Mailer to send. Google may retain sent
-        messages and related metadata under Google's terms and privacy policy. Disconnecting Gmail
-        revokes the token with Google when possible and removes the local connection data.
+        Todo text is included in messages you ask Todo Mailer to send. The SMTP provider may retain
+        sent messages and related metadata under its own terms and privacy policy.
       </p>
 
       <h2>4. Sharing and third parties</h2>
       <p>
         Todo Mailer does not sell, rent, or share your personal information for advertising. The
-        extension communicates with Supabase for authentication and with Google APIs for Gmail
-        authorization and message delivery. These services may process information as described in
-        their respective privacy policies.
+        extension communicates with Supabase for authentication and with its backend service for
+        email delivery. These services may process information as described in their respective
+        privacy policies.
       </p>
 
       <h2>5. Data retention and deletion</h2>
       <p>
         Local todos remain in the browser until you delete them or the selected retention period
         removes them. You can remove local extension data through your browser's extension storage
-        controls. You can disconnect Gmail from Todo Mailer and delete your Todo Mailer account
-        through the authentication provider's available account controls. Contact us if you need
-        help with a deletion request.
+        controls. You can delete your Todo Mailer account through the authentication provider's
+        available account controls. Contact us if you need help with a deletion request.
       </p>
 
       <h2>6. Security</h2>
       <p>
-        Todo Mailer uses browser extension storage and OAuth authorization rather than collecting
-        Gmail passwords. No method of electronic storage or transmission is completely secure, so
-        we cannot guarantee absolute security.
+        Todo Mailer uses browser extension storage and a Supabase session token rather than
+        collecting or storing your email password. No method of electronic storage or transmission
+        is completely secure, so we cannot guarantee absolute security.
       </p>
 
       <h2>7. Children's privacy</h2>

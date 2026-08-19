@@ -16,19 +16,28 @@ cp .env.example .env
 npm run dev
 ```
 
-Fill `.env` with the Supabase project URL, anon key, and a Google OAuth client ID.
-The Google client ID is public extension configuration; never put a Google client secret in the extension.
+Fill `.env` with valid SMTP credentials. If using Gmail as the sender, enable 2-Step Verification
+on that Google account and create an **App Password** (Google Account → Security → 2-Step
+Verification → App Passwords) — use it as `SMTP_PASS`, not the account's normal password. This is
+plain SMTP auth and does not require a Google Cloud project, OAuth consent screen, or domain
+verification.
+Also configure the Supabase project URL and service-role key. The service-role key must stay on the server.
 
-Create a Google OAuth client for the extension, add the extension redirect URL shown by
-`chrome.identity.getRedirectURL("gmail")` to the OAuth client, and set:
+### Deploy to Vercel (free, no SMTP port blocking)
 
-```env
-VITE_GOOGLE_CLIENT_ID=your-google-oauth-client-id
-```
+`server/api/send.ts` and `server/api/health.ts` are ready to run as Vercel serverless functions.
 
-The extension requests only the `gmail.send` scope. Users authorize their own Gmail account,
-and messages are sent through the Gmail API from that account. The deployed server and Resend
-are not used for email delivery.
+1. Push the repo to GitHub and import it in Vercel.
+2. Set the project's **Root Directory** to `server`.
+3. Add the same variables from `server/.env.example` as Environment Variables in the Vercel project
+   settings (`SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`,
+   `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`). `PORT` is not needed on Vercel.
+4. Deploy. The endpoint will be available at `https://<your-project>.vercel.app/api/send`.
+5. Set `VITE_BACKEND_SEND_URL` in `extension/.env` to that URL, and add the same host to
+   `host_permissions` in `extension/manifest.json` / `extension/manifest.firefox.json`.
+
+`npm run dev` / `npm run build` locally still use the Express server in `server/index.ts` on
+`http://localhost:3000`, sharing the same mail-sending logic from `server/src/core.ts`.
 
 ## 2) Build extension
 
