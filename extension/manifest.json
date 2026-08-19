@@ -25,5 +25,5 @@
     "type": "module"
   },
   "permissions": ["storage", "alarms"],
-  "host_permissions": ["http://localhost:3000/*", "https://your-app.vercel.app/*", "https://*.supabase.co/*"]
+  "host_permissions": ["http://localhost:3000/*", "https://todomailer.vercel.app/*", "https://*.supabase.co/*"]
 }
