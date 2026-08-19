@@ -27,16 +27,16 @@ if (missingEnv.length > 0) {
 }
 
 export const transporter = nodemailer.createTransport({
-  host: smtpHost,
+  host: smtpHost as string,
   port: smtpPort,
   secure: smtpSecure,
   auth: {
-    user: smtpUser,
-    pass: smtpPass
+    user: smtpUser as string,
+    pass: smtpPass as string
   }
 });
 
-export const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
+export const supabase = createClient(supabaseUrl as string, supabaseServiceRoleKey as string, {
   auth: {
     autoRefreshToken: false,
     persistSession: false
