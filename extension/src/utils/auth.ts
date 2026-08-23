@@ -68,3 +68,35 @@ export async function signOut(): Promise<void> {
     throw error;
   }
 }
+
+export async function updatePassword(newPassword: string): Promise<void> {
+  const { error } = await getSupabase().auth.updateUser({ password: newPassword });
+  if (error) {
+    throw error;
+  }
+}
+
+export async function requestPasswordReset(email: string): Promise<void> {
+  const { error } = await getSupabase().auth.resetPasswordForEmail(email);
+  if (error) {
+    throw error;
+  }
+}
+
+// Completes a password reset using the 6-digit code emailed by Supabase (no redirect page needed).
+export async function confirmPasswordReset(
+  email: string,
+  code: string,
+  newPassword: string
+): Promise<void> {
+  const { error: verifyError } = await getSupabase().auth.verifyOtp({
+    email,
+    token: code,
+    type: "recovery"
+  });
+  if (verifyError) {
+    throw verifyError;
+  }
+
+  await updatePassword(newPassword);
+}

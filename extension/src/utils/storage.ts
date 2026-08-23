@@ -70,3 +70,19 @@ export async function patchSettings(patch: Partial<Settings>): Promise<Settings>
   await saveSettings(next);
   return next;
 }
+
+const PENDING_RESET_KEY = "pendingPasswordReset";
+
+// Popups close when the user switches tabs to check their email, so the in-progress
+// "enter reset code" step is persisted here to survive that and be restored on reopen.
+export async function getPendingReset(): Promise<{ email: string } | undefined> {
+  return storageGet<{ email: string }>(PENDING_RESET_KEY);
+}
+
+export async function setPendingReset(email: string): Promise<void> {
+  await storageSet(PENDING_RESET_KEY, { email });
+}
+
+export async function clearPendingReset(): Promise<void> {
+  await storageSet(PENDING_RESET_KEY, undefined);
+}
