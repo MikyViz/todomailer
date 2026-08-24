@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Todo Mailer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Saves todos and sends them to your email.",
   "action": {
     "default_title": "Todo Mailer",
