@@ -14,6 +14,11 @@ body {
   padding: 12px;
 }
 
+.popup.sending,
+.popup.sending * {
+  cursor: progress !important;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -60,6 +65,10 @@ button {
   padding: 8px 10px;
   font-weight: 600;
   cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.7;
 }
 
 .primary {

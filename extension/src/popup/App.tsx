@@ -35,6 +35,7 @@ export function App() {
   const [todos, setLocalTodos] = useState<Todo[]>([]);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [status, setStatus] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [authenticatedEmail, setAuthenticatedEmail] = useState<string>();
   const [userId, setUserId] = useState<string>();
@@ -81,11 +82,14 @@ export function App() {
       return;
     }
 
+    setIsSending(true);
     try {
       await sendTodoEmail(todo);
       setStatus("Todo sent by email.");
     } catch (error) {
       setStatus(`Todo was saved, but sending failed: ${(error as Error).message}`);
+    } finally {
+      setIsSending(false);
     }
   }
 
@@ -105,11 +109,14 @@ export function App() {
       return;
     }
 
+    setIsSending(true);
     try {
       await sendTodoEmail(todo);
       setStatus("Todo sent again.");
     } catch (error) {
       setStatus(`Resending failed: ${(error as Error).message}`);
+    } finally {
+      setIsSending(false);
     }
   }
 
@@ -119,11 +126,14 @@ export function App() {
       return;
     }
 
+    setIsSending(true);
     try {
       await sendTodoDigest(visibleTodos);
       setStatus("Todo list sent.");
     } catch (error) {
       setStatus(`Sending the list failed: ${(error as Error).message}`);
+    } finally {
+      setIsSending(false);
     }
   }
 
@@ -138,7 +148,7 @@ export function App() {
   }
 
   return (
-    <main className="popup">
+    <main className={`popup ${isSending ? "sending" : ""}`} aria-busy={isSending}>
       <header className="header">
         <h1>Todo Mailer</h1>
         <button className="ghost" onClick={() => setShowSettings((prev) => !prev)}>
@@ -193,7 +203,7 @@ export function App() {
               value={input}
               onChange={(event) => setInput(event.target.value)}
             />
-            <button className="primary" onClick={() => void handleSubmit()}>
+            <button className="primary" onClick={() => void handleSubmit()} disabled={isSending}>
               Send
             </button>
             {status && <p className="status">{status}</p>}
@@ -203,7 +213,7 @@ export function App() {
             <section className="panel listPanel">
               <div className="listHeader">
                 <h2>Todos</h2>
-                <button className="secondary" onClick={() => void handleResendAll()}>
+                <button className="secondary" onClick={() => void handleResendAll()} disabled={isSending}>
                   Send again (all)
                 </button>
               </div>
@@ -224,7 +234,11 @@ export function App() {
                       </label>
                       <small>{formatDate(todo.createdAt)}</small>
                       <div className="actions">
-                        <button className="secondary" onClick={() => void handleResendTodo(todo)}>
+                        <button
+                          className="secondary"
+                          onClick={() => void handleResendTodo(todo)}
+                          disabled={isSending}
+                        >
                           Send again
                         </button>
                         <button className="danger" onClick={() => void handleDelete(todo.id)}>
